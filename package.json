@@ -16,6 +16,11 @@
     "dev": "npm run build && node ./build/bin/acady.js"
   },
   "devDependencies": {
+    "@aws-sdk/client-apigatewayv2": "^3.743.0",
+    "@aws-sdk/client-iam": "^3.743.0",
+    "@aws-sdk/client-lambda": "^3.743.0",
+    "@aws-sdk/credential-provider-node": "^3.743.0",
+    "@aws-sdk/types": "^3.734.0",
     "@types/jest": "^26.0.19",
     "@types/node": "^14.14.19",
     "@types/sha256": "^0.2.0",
@@ -36,7 +41,6 @@
     "acady-api-builder": "^1.2.2",
     "ansi-regex": "^6.0.1",
     "archiver": "^4.0.2",
-    "aws-sdk": "^2.814.0",
     "chalk": "^4.1.0",
     "cli-table": "^0.3.4",
     "colors": "1.4.0",
@@ -76,6 +80,14 @@
     "webdev",
     "devops"
   ],
+  "peerDependencies": {
+    "@aws-sdk/client-apigatewayv2": "^3.0.0",
+    "@aws-sdk/client-iam": "^3.0.0",
+    "@aws-sdk/client-lambda": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=14"
+  },
   "jest": {
     "transform": {
       ".(ts|tsx)": "ts-jest"

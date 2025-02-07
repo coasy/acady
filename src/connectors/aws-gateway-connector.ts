@@ -1,69 +1,59 @@
-import {Credentials, ApiGatewayV2, Lambda} from "aws-sdk";
+import { 
+    ApiGatewayV2Client,
+    CreateApiCommand,
+    CreateRouteCommand,
+    CreateIntegrationCommand,
+    CreateStageCommand,
+    UpdateApiCommand,
+    UpdateRouteCommand,
+    CreateApiCommandInput,
+    CreateApiCommandOutput,
+    CreateRouteCommandInput,
+    CreateRouteCommandOutput,
+    CreateIntegrationCommandInput,
+    CreateIntegrationCommandOutput,
+    CreateStageCommandInput,
+    CreateStageCommandOutput,
+    UpdateApiCommandInput,
+    UpdateApiCommandOutput,
+    UpdateRouteCommandInput,
+    UpdateRouteCommandOutput
+} from "@aws-sdk/client-apigatewayv2";
+import { AwsCredentialIdentity } from "@aws-sdk/types";
 
 export class AwsGatewayConnector {
-
-    public static createApi(credentials: Credentials, region: string, params: ApiGatewayV2.CreateApiRequest): Promise<ApiGatewayV2.CreateApiResponse> {
+    public static async createApi(credentials: AwsCredentialIdentity, region: string, params: CreateApiCommandInput): Promise<CreateApiCommandOutput> {
         const client = AwsGatewayConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.createApi(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new CreateApiCommand(params));
     }
 
-    public static createRoute(credentials: Credentials, region: string, params: ApiGatewayV2.CreateRouteRequest): Promise<ApiGatewayV2.CreateRouteResult> {
+    public static async createRoute(credentials: AwsCredentialIdentity, region: string, params: CreateRouteCommandInput): Promise<CreateRouteCommandOutput> {
         const client = AwsGatewayConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.createRoute(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new CreateRouteCommand(params));
     }
 
-    public static createIntegration(credentials: Credentials, region: string, params: ApiGatewayV2.CreateIntegrationRequest): Promise<ApiGatewayV2.CreateIntegrationResult> {
+    public static async createIntegration(credentials: AwsCredentialIdentity, region: string, params: CreateIntegrationCommandInput): Promise<CreateIntegrationCommandOutput> {
         const client = AwsGatewayConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.createIntegration(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new CreateIntegrationCommand(params));
     }
 
-    public static createStage(credentials: Credentials, region: string, params: ApiGatewayV2.CreateStageRequest): Promise<ApiGatewayV2.CreateStageResponse> {
+    public static async createStage(credentials: AwsCredentialIdentity, region: string, params: CreateStageCommandInput): Promise<CreateStageCommandOutput> {
         const client = AwsGatewayConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.createStage(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new CreateStageCommand(params));
     }
 
-    public static updateApi(credentials: Credentials, region: string, params: ApiGatewayV2.UpdateApiRequest): Promise<ApiGatewayV2.UpdateApiResponse> {
+    public static async updateApi(credentials: AwsCredentialIdentity, region: string, params: UpdateApiCommandInput): Promise<UpdateApiCommandOutput> {
         const client = AwsGatewayConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.updateApi(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new UpdateApiCommand(params));
     }
 
-    public static updateRoute(credentials: Credentials, region: string, params: ApiGatewayV2.UpdateRouteRequest): Promise<ApiGatewayV2.UpdateRouteResult> {
+    public static async updateRoute(credentials: AwsCredentialIdentity, region: string, params: UpdateRouteCommandInput): Promise<UpdateRouteCommandOutput> {
         const client = AwsGatewayConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.updateRoute(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new UpdateRouteCommand(params));
     }
 
-    private static getClient(credentials: Credentials, region: string): ApiGatewayV2 {
-        return new ApiGatewayV2({
+    private static getClient(credentials: AwsCredentialIdentity, region: string): ApiGatewayV2Client {
+        return new ApiGatewayV2Client({
             region,
             credentials
         });

@@ -1,7 +1,6 @@
 import {StorageService} from "./storage-service";
 import {Account} from "../dto/account";
 import {nanoid} from 'nanoid';
-import {account} from "aws-sdk/clients/sns";
 
 class AccountService {
     public static listAccounts(type?: string): Account[] {
