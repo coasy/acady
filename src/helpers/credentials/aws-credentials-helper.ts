@@ -1,12 +1,12 @@
-import {Credentials} from "aws-sdk";
-import {AwsLambdaConnector} from "../../connectors/aws-lambda-connector";
+import { AwsCredentialIdentity } from "@aws-sdk/types";
+import { AwsLambdaConnector } from "../../connectors/aws-lambda-connector";
 import logSymbols = require("log-symbols");
-import {AwsIamConnector} from "../../connectors/aws-iam-connector";
-import {StringHelper} from "../string-helper";
+import { AwsIamConnector } from "../../connectors/aws-iam-connector";
+import { StringHelper } from "../string-helper";
 
 class AwsCredentialsHelper {
 
-    public static async verify(credentials: Credentials): Promise<string> {
+    public static async verify(credentials: AwsCredentialIdentity): Promise<string> {
         try {
             const functions = await AwsLambdaConnector.listFunctions(credentials, 'us-east-1');
             if (!Array.isArray(functions.Functions))

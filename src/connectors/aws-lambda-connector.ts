@@ -1,102 +1,78 @@
-import {Credentials, Lambda} from "aws-sdk";
+import { 
+    LambdaClient,
+    ListFunctionsCommand,
+    CreateFunctionCommand,
+    AddPermissionCommand,
+    CreateAliasCommand,
+    UpdateAliasCommand,
+    UpdateFunctionCodeCommand,
+    UpdateFunctionConfigurationCommand,
+    ListFunctionsCommandOutput,
+    FunctionConfiguration,
+    AddPermissionCommandOutput,
+    AliasConfiguration,
+    CreateFunctionRequest,
+    AddPermissionRequest,
+    UpdateFunctionCodeRequest,
+    UpdateFunctionConfigurationRequest
+} from "@aws-sdk/client-lambda";
+import { AwsCredentialIdentity } from "@aws-sdk/types";
 
 class AwsLambdaConnector {
-
-
-    public static listFunctions(credentials: Credentials, region: string, marker?: string): Promise<Lambda.ListFunctionsResponse> {
+    public static async listFunctions(credentials: AwsCredentialIdentity, region: string, marker?: string): Promise<ListFunctionsCommandOutput> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-
-        const params = {
-            Marker: marker
-        };
-
-        return new Promise((resolve, reject) => {
-            client.listFunctions(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new ListFunctionsCommand({ Marker: marker }));
     }
 
-
-    public static createFunction(credentials: Credentials, region: string, params: Lambda.Types.CreateFunctionRequest): Promise<Lambda.FunctionConfiguration> {
+    public static async createFunction(credentials: AwsCredentialIdentity, region: string, params: CreateFunctionRequest): Promise<FunctionConfiguration> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.createFunction(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        const response = await client.send(new CreateFunctionCommand(params));
+        return response;
     }
 
-    public static addPermission(credentials: Credentials, region: string, params: Lambda.Types.AddPermissionRequest): Promise<Lambda.AddPermissionResponse> {
+    public static async addPermission(credentials: AwsCredentialIdentity, region: string, params: AddPermissionRequest): Promise<AddPermissionCommandOutput> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.addPermission(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        return client.send(new AddPermissionCommand(params));
     }
 
-    public static createAlias(credentials: Credentials, region: string, functionName: string, functionVersion: string, aliasName: string): Promise<Lambda.AliasConfiguration> {
+    public static async createAlias(credentials: AwsCredentialIdentity, region: string, functionName: string, functionVersion: string, aliasName: string): Promise<AliasConfiguration> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.createAlias({
-                FunctionName: functionName,
-                FunctionVersion: functionVersion,
-                Name: aliasName
-            },(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        const response = await client.send(new CreateAliasCommand({
+            FunctionName: functionName,
+            FunctionVersion: functionVersion,
+            Name: aliasName
+        }));
+        return response;
     }
 
-    public static updateAlias(credentials: Credentials, region: string, functionName: string, functionVersion: string, aliasName: string): Promise<Lambda.AliasConfiguration> {
+    public static async updateAlias(credentials: AwsCredentialIdentity, region: string, functionName: string, functionVersion: string, aliasName: string): Promise<AliasConfiguration> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.updateAlias({
-                FunctionName: functionName,
-                FunctionVersion: functionVersion,
-                Name: aliasName
-            },(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        const response = await client.send(new UpdateAliasCommand({
+            FunctionName: functionName,
+            FunctionVersion: functionVersion,
+            Name: aliasName
+        }));
+        return response;
     }
 
-    public static updateFunctionCode(credentials: Credentials, region: string, params: Lambda.Types.UpdateFunctionCodeRequest): Promise<Lambda.FunctionConfiguration>  {
+    public static async updateFunctionCode(credentials: AwsCredentialIdentity, region: string, params: UpdateFunctionCodeRequest): Promise<FunctionConfiguration> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.updateFunctionCode(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        const response = await client.send(new UpdateFunctionCodeCommand(params));
+        return response;
     }
 
-    public static updateFunctionConfig(credentials: Credentials, region: string, params: Lambda.Types.UpdateFunctionConfigurationRequest): Promise<Lambda.FunctionConfiguration>  {
+    public static async updateFunctionConfig(credentials: AwsCredentialIdentity, region: string, params: UpdateFunctionConfigurationRequest): Promise<FunctionConfiguration> {
         const client = AwsLambdaConnector.getClient(credentials, region);
-        return new Promise((resolve, reject) => {
-            client.updateFunctionConfiguration(params,(err, data) => {
-                if (err) reject(err);
-                else resolve(data)
-            });
-        });
+        const response = await client.send(new UpdateFunctionConfigurationCommand(params));
+        return response;
     }
 
-
-
-
-    private static getClient(credentials: Credentials, region: string): Lambda {
-        return new Lambda({
+    private static getClient(credentials: AwsCredentialIdentity, region: string): LambdaClient {
+        return new LambdaClient({
             region,
             credentials
         });
     }
-
 }
 
-export {AwsLambdaConnector};
+export { AwsLambdaConnector };
